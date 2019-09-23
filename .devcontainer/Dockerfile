@@ -5,6 +5,18 @@
 
 FROM python:3
 
+# This Dockerfile adds a non-root 'vscode' user with sudo access. However, for Linux,
+# this user's GID/UID must match your local user UID/GID to avoid permission issues
+# with bind mounts. Update USER_UID / USER_GID if yours is not 1000. See
+# https://aka.ms/vscode-remote/containers/non-root-user for details.
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# Avoid warnings by switching to noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Golang
 # gcc for cgo
 RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
@@ -52,20 +64,10 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
-WORKDIR $GOPATH
 
-# Avoid warnings by switching to noninteractive
-ENV DEBIAN_FRONTEND=noninteractive
 
+# Python
 ENV PYTHONUNBUFFERED 1
-
-# This Dockerfile adds a non-root 'vscode' user with sudo access. However, for Linux,
-# this user's GID/UID must match your local user UID/GID to avoid permission issues
-# with bind mounts. Update USER_UID / USER_GID if yours is not 1000. See
-# https://aka.ms/vscode-remote/containers/non-root-user for details.
-ARG USERNAME=vscode
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
 
 # Uncomment the following COPY line and the corresponding lines in the `RUN` command if you wish to
 # include your requirements in the image itself. It is suggested that you only do this if your
