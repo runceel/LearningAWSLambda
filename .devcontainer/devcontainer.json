@@ -1,6 +1,9 @@
 {
 	"name": "Learning for AWS Lambda using Golang",
-	"dockerComposeFile": "docker-compose.yml",
+	"dockerComposeFile": [
+		"docker-compose.yml",
+		"docker-compose.secret.yml"
+	],
 	"service": "app",
 	"workspaceFolder": "/go/src",
 	"extensions": [
