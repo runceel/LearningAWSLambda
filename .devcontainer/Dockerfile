@@ -91,6 +91,10 @@ ENV PYTHONUNBUFFERED 1
 # requirements rarely (if ever) change.
 # COPY requirements.txt /tmp/pip-tmp/
 
+# Install docker
+RUN apt-get update \
+    && apt-get -y install docker.io
+
 # Configure apt and install packages
 RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
@@ -98,9 +102,12 @@ RUN apt-get update \
     # Verify git, process tools, lsb-release (common in install instructions for CLIs) installed
     && apt-get -y install git iproute2 procps lsb-release groff-base \
     #
-    # Install pylint
+    # Install python packages
+    && pip install boto3==1.9.233 \
+    && pip install botocore==1.12.233 \
     && pip install pylint \
     && pip install awscli \
+    && pip install aws-sam-cli \
     #
     # Update Python environment based on requirements.txt
     # && pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
