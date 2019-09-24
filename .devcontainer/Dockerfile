@@ -109,6 +109,13 @@ RUN apt-get update \
     && pip install awscli \
     && pip install aws-sam-cli \
     #
+    # install saw
+    && go get -u github.com/TylerBrock/saw \
+    #
+    # install direnv
+    && go get github.com/direnv/direnv \
+    && echo 'eval "$(direnv hook bash)"' >> ~/.bashrc \
+    #
     # Update Python environment based on requirements.txt
     # && pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
     # && rm -rf /tmp/pip-tmp \
